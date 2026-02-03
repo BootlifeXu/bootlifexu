@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Automation Starter</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Automation Starter</h1>
+      <p id="active-url">No active tab</p>
+    </header>
+
+    <section class="controls">
+      <div class="button-row">
+        <button id="run">Run</button>
+        <button id="stop" class="secondary">Stop</button>
+        <button id="load-example" class="secondary">Load Example</button>
+      </div>
+
+      <div class="field-row">
+        <label for="loop-count">Loop count</label>
+        <input id="loop-count" type="number" min="1" value="1" />
+      </div>
+
+      <div class="field-row">
+        <label for="csv-file">CSV data</label>
+        <input id="csv-file" type="file" accept=".csv" />
+      </div>
+
+      <div id="csv-summary" class="hint">No CSV loaded.</div>
+
+      <label for="steps">Steps (JSON)</label>
+      <textarea id="steps" rows="12"></textarea>
+      <div class="hint">
+        Available actions: wait, waitFor, click, type, scroll, focus, setValue, highlight,
+        paste, keySequence.
+      </div>
+      <div class="hint">
+        Template variables: {{row.fieldName}}, {{value}}, {{index}} when CSV is loaded.
+      </div>
+    </section>
+
+    <section class="status">
+      <h2>Status</h2>
+      <div id="status-log">Idle.</div>
+    </section>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

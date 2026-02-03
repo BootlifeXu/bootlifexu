@@ -1,0 +1,147 @@
+:root {
+  color-scheme: light dark;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  width: 360px;
+  background: #f8f9fb;
+  color: #1f2328;
+}
+
+header {
+  margin-bottom: 12px;
+}
+
+h1 {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+
+#active-url {
+  font-size: 12px;
+  color: #5c6670;
+  margin: 0;
+  word-break: break-all;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #e2e8f0;
+  color: #1f2328;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+label {
+  font-weight: 600;
+}
+
+.field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+input[type="number"],
+input[type="file"] {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #d0d7de;
+  background: #fff;
+  color: #1f2328;
+}
+
+textarea {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  font-size: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d0d7de;
+  min-height: 200px;
+  resize: vertical;
+  background: #fff;
+  color: #1f2328;
+}
+
+.hint {
+  font-size: 12px;
+  color: #5c6670;
+}
+
+.status {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.status h2 {
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+#status-log {
+  font-size: 12px;
+  white-space: pre-wrap;
+  color: #1f2328;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #0f1419;
+    color: #e6edf3;
+  }
+
+  #active-url,
+  .hint {
+    color: #9aa4ad;
+  }
+
+  button.secondary {
+    background: #1f2937;
+    color: #e6edf3;
+  }
+
+  textarea,
+  input[type="number"],
+  input[type="file"] {
+    background: #0b1116;
+    border-color: #27313a;
+    color: #e6edf3;
+  }
+
+  .status {
+    background: #0b1116;
+    border-color: #27313a;
+  }
+}
