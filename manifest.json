@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Automation Starter",
+  "version": "0.1.0",
+  "description": "Run simple, scriptable automation steps on the current page.",
+  "action": {
+    "default_title": "Automation Starter",
+    "default_popup": "popup.html"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

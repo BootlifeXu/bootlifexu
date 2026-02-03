@@ -17,6 +17,41 @@ Passionate frontend developer with a keen interest in creating interactive and p
 
 ---
 
+## Chrome Extension: Website Automation Starter
+
+This repository now includes a minimal Chrome extension that lets you run JSON-defined automation steps on the active tab.
+
+### How to Load in Chrome
+
+1. Open `chrome://extensions` in Chrome.
+2. Enable **Developer mode**.
+3. Click **Load unpacked** and select this repository folder.
+4. Pin the extension to the toolbar for quick access.
+
+### Example Steps
+
+The popup ships with a starter script. You can customize it using the supported actions:
+`wait`, `waitFor`, `click`, `type`, `scroll`, `focus`, `setValue`, `highlight`, `paste`, `keySequence`.
+
+### Looping + CSV-driven runs
+
+- **Loop count** repeats the step list for each CSV row (or once if no CSV is loaded).
+- **CSV import** lets you feed per-row data into steps using template variables like `{{row.name}}`,
+  `{{value}}` (first column), and `{{index}}`.
+
+```json
+[
+  { "action": "wait", "ms": 1000 },
+  { "action": "highlight", "selector": "input, textarea", "durationMs": 800 },
+  { "action": "waitFor", "selector": "input[type='search']", "timeoutMs": 5000 },
+  { "action": "paste", "selector": "input[type='search']", "text": "{{value}}" },
+  { "action": "keySequence", "keys": ["Enter"], "delayMs": 150 },
+  { "action": "scroll", "y": 600, "behavior": "smooth" }
+]
+```
+
+---
+
 ## Tech Stack
 
 **Frontend**  
