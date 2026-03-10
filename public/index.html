@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Cartesia Voice Cloner</title>
+    <style>
+      body { font-family: Arial, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; }
+      .container { max-width: 860px; margin: 24px auto; padding: 0 16px; }
+      .card { background: #1e293b; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+      h1, h2 { margin-top: 0; }
+      label { display: block; margin: 10px 0 6px; }
+      input, textarea, select, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #0b1220; color: #e2e8f0; }
+      button { background: #2563eb; border: none; font-weight: bold; cursor: pointer; margin-top: 12px; }
+      button:hover { background: #1d4ed8; }
+      .row { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+      .status { margin-top: 10px; font-size: 14px; color: #93c5fd; white-space: pre-wrap; }
+      .warn { color: #fca5a5; font-size: 13px; }
+      audio { width: 100%; margin-top: 12px; }
+      a.download { display: inline-block; margin-top: 12px; color: #93c5fd; }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <h1>Simple Voice Cloner (Cartesia)</h1>
+      <p class="warn">Note: 99% exact matching cannot be guaranteed by any provider. This app provides a practical cloning + TTS workflow.</p>
+
+      <section class="card">
+        <h2>1) Upload your voice and clone it</h2>
+        <label for="voiceName">Voice name</label>
+        <input id="voiceName" value="My Cloned Voice" />
+
+        <label for="voiceFile">Voice sample file (wav/mp3/m4a)</label>
+        <input id="voiceFile" type="file" accept="audio/*" />
+
+        <button id="cloneBtn">Clone Voice</button>
+        <div id="cloneStatus" class="status"></div>
+      </section>
+
+      <section class="card">
+        <h2>2) Generate speech with emotion</h2>
+        <label for="voiceId">Voice ID</label>
+        <input id="voiceId" placeholder="Will auto-fill after cloning" />
+
+        <label for="text">Text to speak</label>
+        <textarea id="text" rows="5" placeholder="Type or paste your text here"></textarea>
+
+        <div class="row">
+          <div>
+            <label for="emotion">Emotion</label>
+            <select id="emotion">
+              <option value="neutral">neutral</option>
+              <option value="happy">happy</option>
+              <option value="sad">sad</option>
+              <option value="angry">angry</option>
+              <option value="excited">excited</option>
+            </select>
+          </div>
+          <div>
+            <label for="speed">Speed</label>
+            <input id="speed" type="number" min="0.5" max="1.5" step="0.1" value="1" />
+          </div>
+        </div>
+
+        <button id="generateBtn">Generate Voice Audio</button>
+        <div id="generateStatus" class="status"></div>
+        <audio id="player" controls></audio>
+        <a id="downloadLink" class="download" download hidden>Download generated audio</a>
+      </section>
+    </main>
+
+    <script>
+      const cloneBtn = document.getElementById('cloneBtn');
+      const generateBtn = document.getElementById('generateBtn');
+
+      cloneBtn.addEventListener('click', async () => {
+        const file = document.getElementById('voiceFile').files[0];
+        const voiceName = document.getElementById('voiceName').value.trim();
+        const status = document.getElementById('cloneStatus');
+
+        if (!file) {
+          status.textContent = 'Please upload a voice sample first.';
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('voiceSample', file);
+        formData.append('voiceName', voiceName);
+
+        status.textContent = 'Cloning voice...';
+
+        const res = await fetch('/api/clone-voice', {
+          method: 'POST',
+          body: formData
+        });
+
+        const json = await res.json();
+        if (!res.ok) {
+          status.textContent = 'Clone failed:\n' + JSON.stringify(json, null, 2);
+          return;
+        }
+
+        document.getElementById('voiceId').value = json.voiceId;
+        status.textContent = `Clone success. Voice ID: ${json.voiceId}`;
+      });
+
+      generateBtn.addEventListener('click', async () => {
+        const voiceId = document.getElementById('voiceId').value.trim();
+        const text = document.getElementById('text').value.trim();
+        const emotion = document.getElementById('emotion').value;
+        const speed = document.getElementById('speed').value;
+        const status = document.getElementById('generateStatus');
+        const player = document.getElementById('player');
+        const downloadLink = document.getElementById('downloadLink');
+
+        if (!voiceId || !text) {
+          status.textContent = 'voiceId and text are required.';
+          return;
+        }
+
+        status.textContent = 'Generating speech...';
+
+        const res = await fetch('/api/generate-speech', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ voiceId, text, emotion, speed })
+        });
+
+        const json = await res.json();
+        if (!res.ok) {
+          status.textContent = 'Generate failed:\n' + JSON.stringify(json, null, 2);
+          return;
+        }
+
+        player.src = json.audioUrl;
+        downloadLink.href = json.audioUrl;
+        downloadLink.hidden = false;
+        downloadLink.textContent = `Download ${json.fileName}`;
+        status.textContent = 'Speech generated successfully.';
+      });
+    </script>
+  </body>
+</html>
